@@ -78,9 +78,8 @@ def view_todo_list(self):
     else:
         return 'Список дел пуст'
 
-    # Запуск музыки
 
-
+# Запуск музыки
 def play_sound(self):
     answer_function('Музыка так музыка')
     if self.list_commands['directory'] == '0':

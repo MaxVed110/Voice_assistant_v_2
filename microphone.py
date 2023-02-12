@@ -14,12 +14,10 @@ class Microphone:
         with speech_recognition.Microphone() as micro:
             self.sr.adjust_for_ambient_noise(source=micro, duration=0.5)
             print('Можно говорить')
-            audio = self.sr.listen(source=micro, timeout=5, phrase_time_limit=5)  # ToDo
+            audio = self.sr.listen(source=micro, timeout=5, phrase_time_limit=5)  # ToDo добавить задержку
             try:
                 #  audio = sr.listen(source=micro)
                 phrase = self.sr.recognize_google(audio_data=audio, language='ru-RU').lower()
-                print(phrase)
                 return phrase
             except speech_recognition.UnknownValueError:
                 print('Ошибка, повторите фразу')
-                self.listen_command()

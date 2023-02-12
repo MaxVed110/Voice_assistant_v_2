@@ -1,6 +1,5 @@
 from core import Assistant
-from PyQt5 import QtWidgets, QtCore, QtGui
-import form_ui
+from PyQt5 import QtWidgets
 
 if __name__ == '__main__':
     App = QtWidgets.QApplication([])

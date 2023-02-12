@@ -1,7 +1,7 @@
 from commander import *
 
-from PyQt5 import QtWidgets, QtCore, QtGui
-import form_ui
+from PyQt5 import QtWidgets, QtCore
+import form_two_t
 
 import threading
 
@@ -9,24 +9,22 @@ work = True
 
 
 # Основной класс
-class Assistant(QtWidgets.QMainWindow, form_ui.Ui_MainWindow, threading.Thread):
+class Assistant(QtWidgets.QMainWindow, form_two_t.Ui_MainWindow, threading.Thread):
 
     def __init__(self):
         super(Assistant, self).__init__()
         self.setupUi(self)
         self.microphone = Microphone()
+        self.work = True
         ##
         self.pushButton.pressed.connect(self.start_thread_assistant)
+        self.pushButton_2.pressed.connect(self.off_assistant)
 
     # Рабочий цикл
     def run_assistant(self):
-        phrase_assis = QtWidgets.QListWidgetItem()
-        phrase_assis.setTextAlignment(QtCore.Qt.AlignLeft)
-        phrase_assis.setText('Максон: \nПривет, я Максон, что хотели?')
+        self.output_answer('Привет, я Максон, что хотели?')
         answer_function('Привет, я Максон, что хотели?')
         n = 0
-        global work
-        work = True
         while work:
             n += 1
             print(f'цикл {n}')
@@ -38,19 +36,24 @@ class Assistant(QtWidgets.QMainWindow, form_ui.Ui_MainWindow, threading.Thread):
             for key in list_commands['commands'].keys():
                 if phrase in key:
                     answer = list_commands['commands'][key]()
-                    phrase_assis.setText(f'Максон: \n{answer}')
+                    self.output_answer(answer)
                     continue
                 else:
-                    print('Повтори фразу')
+                    self.output_answer('Я пока не понимаю такой команды')
                     continue
 
+    def output_answer(self, answer):
+        phrase_assis = QtWidgets.QListWidgetItem()
+        phrase_assis.setTextAlignment(QtCore.Qt.AlignLeft)
+        phrase_assis.setText(f'Максон: \n {answer}')
+        self.listWidget.addItem(phrase_assis)
+
     def start_thread_assistant(self):
+        global work
+        work = True
         thread_one = threading.Thread(target=self.run_assistant, args=())
         thread_one.start()
 
     def off_assistant(self):
         global work
         work = False
-
-
-
