@@ -10,7 +10,7 @@ class Microphone:
         self.sr.energy_threshold = 1000
 
     # Функция для прослушивания микрофона
-    def listen_command(self):
+    def listen_command(self, parameter: True):
         with speech_recognition.Microphone() as micro:
             self.sr.adjust_for_ambient_noise(source=micro, duration=0.5)
             print('Можно говорить')
@@ -18,6 +18,10 @@ class Microphone:
             try:
                 #  audio = sr.listen(source=micro)
                 phrase = self.sr.recognize_google(audio_data=audio, language='ru-RU').lower()
-                return phrase
+                if parameter:
+                    return phrase
+                else:
+                    return phrase.split(' ')
             except speech_recognition.UnknownValueError:
                 print('Ошибка, повторите фразу')
+

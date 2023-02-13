@@ -5,8 +5,6 @@ import form_two_t
 
 import threading
 
-work = True
-
 
 # Основной класс
 class Assistant(QtWidgets.QMainWindow, form_two_t.Ui_MainWindow, threading.Thread):
@@ -19,28 +17,30 @@ class Assistant(QtWidgets.QMainWindow, form_two_t.Ui_MainWindow, threading.Threa
         ##
         self.pushButton.pressed.connect(self.start_thread_assistant)
         self.pushButton_2.pressed.connect(self.off_assistant)
+        self.not_result = True
 
     # Рабочий цикл
     def run_assistant(self):
         self.output_answer('Привет, я Максон, что хотели?')
         answer_function('Привет, я Максон, что хотели?')
         n = 0
-        while work:
+        while self.work:
             n += 1
             print(f'цикл {n}')
-            phrase = self.microphone.listen_command()
+            phrase = self.microphone.listen_command(False)
             phrase_us = QtWidgets.QListWidgetItem()
             phrase_us.setTextAlignment(QtCore.Qt.AlignRight)
             phrase_us.setText(f'Я: \n  {phrase}')
             self.listWidget.addItem(phrase_us)
-            for key in list_commands['commands'].keys():
-                if phrase in key:
-                    answer = list_commands['commands'][key]()
-                    self.output_answer(answer)
-                    continue
-                else:
-                    self.output_answer('Я пока не понимаю такой команды')
-                    continue
+            for word in phrase:
+                for key in list_commands['commands'].keys():
+                    if word in key:
+                        answer = list_commands['commands'][key]()
+                        self.output_answer(answer)
+                        self.not_result = False
+                        break
+            if self.not_result:
+                self.output_answer('Я пока не понимаю такой команды')
 
     def output_answer(self, answer):
         phrase_assis = QtWidgets.QListWidgetItem()
@@ -49,11 +49,9 @@ class Assistant(QtWidgets.QMainWindow, form_two_t.Ui_MainWindow, threading.Threa
         self.listWidget.addItem(phrase_assis)
 
     def start_thread_assistant(self):
-        global work
-        work = True
+        self.work = True
         thread_one = threading.Thread(target=self.run_assistant, args=())
         thread_one.start()
 
     def off_assistant(self):
-        global work
-        work = False
+        self.work = False

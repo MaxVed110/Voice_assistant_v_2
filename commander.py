@@ -152,17 +152,71 @@ def open_internet_search(self):
         return text
 
 
+# ef opener_application(self, task):
+#    links = {
+#        ('youtube', 'ютуб', 'ютюб'): 'https://youtube.com/',
+#        ('вк', 'вконтакте', 'контакт', 'vk'): 'https:vk.com/feed',
+#        ('браузер', 'интернет', 'browser'): 'https://google.com/',
+#        ('insta', 'instagram', 'инста', 'инсту'): 'https://www.instagram.com/',
+#        ('почта', 'почту', 'gmail', 'гмейл', 'гмеил', 'гмаил'): 'http://gmail.com/',
+#    }
+
+#    def open_discord():
+#        system(r"C:\Users\Ruslan\AppData\Local\Discord\Update.exe --processStart Discord.exe")
+#        system("cls")
+#        self.talk(choice(["Открываю дискорд", "Включаю дискорд", "запускаю дискорд"]))
+
+#    def open_tg():
+#        startfile(r"F:\Telegram Desktop\Telegram.exe")
+#        self.talk(choice(["Открываю телеграм", "Включаю телеграм", "запускаю телеграм"]))
+
+#    def calc():
+#        self.talk("открываю калькулятор")
+#        system("calc")
+
+#    def snippingtool():
+#        self.talk("открываю ножницы")
+#        system("snippingtool")
+
+#    programs = {
+#        'discord': open_discord, 'дискорд': open_discord,
+#        'телеграм': open_tg, 'telegram': open_tg,
+#        'калькулятор': calc, 'calculator': calc,
+#        'ножницы': snippingtool
+#    }
+
+#    j = 0
+#    if 'и' in task:
+#        task = task.replace('и', '').replace('  ', ' ')
+#    double_task = task.split()
+#    if j != len(double_task):
+#        for i in range(len(double_task)):
+#            for vals in links:
+#                for word in vals:
+#                    if fuzz.ratio(word, double_task[i]) > 75:
+#                        webbrowser.open(links[vals])
+#                        self.talk('Открываю ' + double_task[i])
+#                        j += 1
+#                        break
+#            else:
+#                for vals in programs:
+#                    if fuzz.ratio(vals, double_task[i]) > 75:
+#                        programs[vals]()
+#                        j += 1
+#                        break
+
+
 # Список команд
 list_commands = {
     'commands': {
-        ('привет', 'максон', 'привет максон', 'эй максон'): greeting,
-        ('добавить задачу', 'есть дело'): create_todo_list,
-        ('посмотреть список дел', 'открой список дел'): view_todo_list,
-        ('включи музыку', 'музон'): play_sound,
-        ('открой браузер', 'интернет'): open_browser,
+        ('привет', 'максон', 'эй'): greeting,
+        ('добавить', 'задача', 'дело'): create_todo_list,
+        ('посмотреть', 'список', 'список', 'дел'): view_todo_list,
+        ('включи', 'музыку', 'музон', 'музыка'): play_sound,
+        ('браузер', 'интернет'): open_browser,
         ('поиск', 'найди'): internet_search,
         ('выключи', 'перезагрузи', 'выруби', 'отключи', 'перезагрузка', 'ребут'): shutdown_reboot_pc,
-        ('открой', 'перейди', 'покажи'): open_internet_search
+        ('открой', 'перейди', 'покажи', 'открой ссылку'): open_internet_search
     },
     'directory': '0'
 }
