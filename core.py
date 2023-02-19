@@ -35,7 +35,7 @@ class Assistant(QtWidgets.QMainWindow, form_two_t.Ui_MainWindow, threading.Threa
             for word in phrase:
                 for key in list_commands['commands'].keys():
                     if word in key:
-                        answer = list_commands['commands'][key]()
+                        answer = list_commands['commands'][key](phrase)
                         self.output_answer(answer)
                         self.not_result = False
                         break

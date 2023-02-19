@@ -24,4 +24,3 @@ class Microphone:
                     return phrase.split(' ')
             except speech_recognition.UnknownValueError:
                 print('Ошибка, повторите фразу')
-

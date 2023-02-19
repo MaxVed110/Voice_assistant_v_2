@@ -27,37 +27,24 @@ def greeting():
 
 # Перезагрузка/выключение ПК
 def shutdown_reboot_pc(value: str):
-    lst = value.split()
     commander_s = ['выключи', 'выруби', 'отключи']
     commander_r = ['перезагрузка', 'перезагрузи', 'ребут']
-    if any(x in lst for x in commander_s):
+    if any(x in value for x in commander_s):
         text = 'Выключение через 3 секунды'
         answer_function(text)
         os.system('shutdown /s /t 3')
         return text
-    if any(x in lst for x in commander_r):
+    if any(x in value for x in commander_r):
         text = 'Перезагрузка через 3 секунды'
         answer_function(text)
         os.system('shutdown /r /t 3')
         return text
 
 
-# Открыть браузер (Яндекс по умолчанию)
-def open_browser(self):
-    answer_function('Открываю Яндекс')
-    try:
-        files = r'C:\Program Files (x86)\Yandex\YandexBrowser\Application\browser.exe'
-        os.startfile(files)
-    except FileNotFoundError:
-        text = 'Такого браузера нет. Пожалуйста, скачайте его или переместите в другую директорию (PFx86)'
-        answer_function(text)
-        return text
-
-
 # Создать новый список дел или добавить запись (записная книжка)
-def create_todo_list(self):
+def create_todo_list():
     answer_function('Что добавим в список дел?')
-    phrase = self.microphone.listen_command()
+    phrase = microphone.listen_command(parameter=True)
     if os.path.exists('To_Do_list.txt'):
         x = 'w'
     else:
@@ -69,7 +56,7 @@ def create_todo_list(self):
 
 
 # Показать список дел
-def view_todo_list(self):
+def view_todo_list():
     answer_function('Показываю список дел')
     if os.path.exists('To_Do_list.txt'):
         with open('To_Do_list.txt') as file:
@@ -80,18 +67,18 @@ def view_todo_list(self):
 
 
 # Запуск музыки
-def play_sound(self):
+def play_sound():
     answer_function('Музыка так музыка')
-    if self.list_commands['directory'] == '0':
+    if list_commands['directory'] == '0':
         window = tk.Tk()
         intro = tk.Label(text="Выберите папку с музыкой\n(для продолжения закройте это окно)",
                          width=40, height=4, font='Times 20')
         intro.pack()
         window.mainloop()
         folderlocation = askdirectory()
-        self.list_commands['directory'] = folderlocation
+        list_commands['directory'] = folderlocation
 
-    files = os.listdir(self.list_commands['directory'])
+    files = os.listdir(list_commands['directory'])
     if len(files) != 0:
         random_file = f'{choice(files)}'
         answer_function(f'Колбасимся под {random_file.split("/")[-1]}')
@@ -104,9 +91,9 @@ def play_sound(self):
 
 
 # Поиск в интернете и выдача первой ссылки
-def internet_search(self):
+def internet_search():
     answer_function('Что хотите найти?')
-    phrase = self.microphone.listen_command()
+    phrase = microphone.listen_command(parameter=True)
     parameter = {
         "engine": "yandex",
         "text": phrase,
@@ -117,7 +104,7 @@ def internet_search(self):
         dict_results = search.get_dict()
         list_res = [dict_results['organic_results'][0]['link'], dict_results['organic_results'][0]['snippet']]
 
-        """ToDo, посмотреть выдачу (правильность)"""
+        # ToDo, посмотреть выдачу (правильность)
         # print(dict_results['organic_results'][0]['link'])
         # print(dict_results['organic_results'][0]['snippet'])
 
@@ -130,9 +117,9 @@ def internet_search(self):
 
 
 # Открывание ссылок
-def open_internet_search(self):
+def open_internet_search():
     answer_function('Какую ссылку открыть?')
-    phrase = self.microphone.listen_command()
+    phrase = microphone.listen_command(parameter=True)
     parameter = {
         "engine": "yandex",
         "text": phrase,
@@ -152,58 +139,40 @@ def open_internet_search(self):
         return text
 
 
-# ef opener_application(self, task):
-#    links = {
-#        ('youtube', 'ютуб', 'ютюб'): 'https://youtube.com/',
-#        ('вк', 'вконтакте', 'контакт', 'vk'): 'https:vk.com/feed',
-#        ('браузер', 'интернет', 'browser'): 'https://google.com/',
-#        ('insta', 'instagram', 'инста', 'инсту'): 'https://www.instagram.com/',
-#        ('почта', 'почту', 'gmail', 'гмейл', 'гмеил', 'гмаил'): 'http://gmail.com/',
-#    }
+# Открытие приложений
+def opener_application(text):
+    def opener(path: str, name: str):
+        try:
+            os.startfile(path)
+            answer_function(f'Открываю {name}')
+        except FileNotFoundError:
+            text_ans = 'В стандартизированной директории приложение не найдено'
+            answer_function(text_ans)
+            return text_ans
 
-#    def open_discord():
-#        system(r"C:\Users\Ruslan\AppData\Local\Discord\Update.exe --processStart Discord.exe")
-#        system("cls")
-#        self.talk(choice(["Открываю дискорд", "Включаю дискорд", "запускаю дискорд"]))
+    # Открыть браузер (Яндекс по умолчанию)
+    def open_browser():
+        answer_function('Открываю Яндекс')
+        try:
+            files = r'C:\Program Files (x86)\Yandex\YandexBrowser\Application\browser.exe'
+            os.startfile(files)
+        except FileNotFoundError:
+            text_ans = 'Такого браузера нет. Пожалуйста, скачайте его или переместите в другую директорию (PFx86)'
+            answer_function(text_ans)
+            return text_ans
 
-#    def open_tg():
-#        startfile(r"F:\Telegram Desktop\Telegram.exe")
-#        self.talk(choice(["Открываю телеграм", "Включаю телеграм", "запускаю телеграм"]))
+    programs = {
+        'дискорд': r'C:\Users\Максим\AppData\Local\Discord\Update.exe',
+        'телеграм': r'C:\Users\Максим\AppData\Roaming\Telegram Desktop\Telegram.exe',
+        'калькулятор': 'calc',
+        'ножницы': 'snippingtool'
+    }
 
-#    def calc():
-#        self.talk("открываю калькулятор")
-#        system("calc")
-
-#    def snippingtool():
-#        self.talk("открываю ножницы")
-#        system("snippingtool")
-
-#    programs = {
-#        'discord': open_discord, 'дискорд': open_discord,
-#        'телеграм': open_tg, 'telegram': open_tg,
-#        'калькулятор': calc, 'calculator': calc,
-#        'ножницы': snippingtool
-#    }
-
-#    j = 0
-#    if 'и' in task:
-#        task = task.replace('и', '').replace('  ', ' ')
-#    double_task = task.split()
-#    if j != len(double_task):
-#        for i in range(len(double_task)):
-#            for vals in links:
-#                for word in vals:
-#                    if fuzz.ratio(word, double_task[i]) > 75:
-#                        webbrowser.open(links[vals])
-#                        self.talk('Открываю ' + double_task[i])
-#                        j += 1
-#                        break
-#            else:
-#                for vals in programs:
-#                    if fuzz.ratio(vals, double_task[i]) > 75:
-#                        programs[vals]()
-#                        j += 1
-#                        break
+    for word in text:
+        if word in programs.keys():
+            opener(programs[word], word)
+        if word in ['браузер', 'интернет']:
+            open_browser()
 
 
 # Список команд
@@ -213,7 +182,6 @@ list_commands = {
         ('добавить', 'задача', 'дело'): create_todo_list,
         ('посмотреть', 'список', 'список', 'дел'): view_todo_list,
         ('включи', 'музыку', 'музон', 'музыка'): play_sound,
-        ('браузер', 'интернет'): open_browser,
         ('поиск', 'найди'): internet_search,
         ('выключи', 'перезагрузи', 'выруби', 'отключи', 'перезагрузка', 'ребут'): shutdown_reboot_pc,
         ('открой', 'перейди', 'покажи', 'открой ссылку'): open_internet_search
